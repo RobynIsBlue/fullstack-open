@@ -12,6 +12,14 @@ function Feedback({ onGood, onNeutral, onBad }) {
 }
 
 function Stats({ good, neutral, bad }) {
+  if (good + neutral + bad === 0) {
+    return (
+      <div>
+        <h1>Statistics</h1>
+        <p>No Feedback given</p>
+      </div>
+    );
+  }
   return (
     <div>
       <h1>Statistics</h1>
