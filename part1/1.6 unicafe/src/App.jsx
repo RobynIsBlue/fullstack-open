@@ -4,10 +4,25 @@ function Feedback({ onGood, onNeutral, onBad }) {
   return (
     <div>
       <h1>Feedback</h1>
-      <button onClick={onGood}>Good</button>
-      <button onClick={onNeutral}>Neutral</button>
-      <button onClick={onBad}>Bad</button>
+      <Button text={"Good"} onClick={onGood} />
+      <Button text={"Neutral"} onClick={onNeutral} />
+      <Button text={"Bad"} onClick={onBad} />
     </div>
+  );
+}
+
+function Button({ text, ...rest }) {
+  return <button {...rest}>{text}</button>;
+}
+
+function StatLine({ text, val }) {
+  return (
+    <tbody>
+      <tr>
+        <td>{text} </td>
+        <td>{val}</td>
+      </tr>
+    </tbody>
   );
 }
 
@@ -23,14 +38,20 @@ function Stats({ good, neutral, bad }) {
   return (
     <div>
       <h1>Statistics</h1>
-      <p>Good: {good}</p>
-      <p>Neutral: {neutral}</p>
-      <p>Bad: {bad}</p>
-      <p>All: {good + neutral + bad}</p>
-      <p>Average: {((good - bad) / (good + neutral + bad)).toFixed(2)} </p>
-      <p>
-        Positive: {((good * 100) / (good + neutral + bad)).toFixed(2) + "%"}
-      </p>
+      <table>
+        <StatLine text={"Good"} val={good} />
+        <StatLine text={"Neutral"} val={neutral} />
+        <StatLine text={"Bad"} val={bad} />
+        <StatLine text={"All"} val={good + neutral + bad} />
+        <StatLine
+          text={"Average"}
+          val={((good - bad) / (good + neutral + bad)).toFixed(2)}
+        />
+        <StatLine
+          text={"Positive"}
+          val={((good * 100) / (good + neutral + bad)).toFixed(2) + "%"}
+        />
+      </table>
     </div>
   );
 }
