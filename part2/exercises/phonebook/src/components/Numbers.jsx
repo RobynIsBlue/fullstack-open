@@ -1,4 +1,4 @@
-function Numbers({ persons, filterTerm }) {
+function Numbers({ persons, filterTerm, handleDelete }) {
   return (
     <div>
       <h2>Numbers</h2>
@@ -12,6 +12,7 @@ function Numbers({ persons, filterTerm }) {
         .map((person) => (
           <p key={person.name}>
             {person.name} {person.number}
+            <button onClick={() => handleDelete(person.id)}>Delete</button>
           </p>
         ))}
     </div>

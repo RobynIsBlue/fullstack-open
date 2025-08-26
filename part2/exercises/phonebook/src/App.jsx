@@ -1,32 +1,57 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Filter from "./components/Filter";
 import Phonebook from "./components/Phonebook";
 import Numbers from "./components/Numbers";
+import axios from "axios";
+import numbersService from "./services/numbers";
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: "Kindred", number: "69-420" },
-    { name: "Vex" },
-    { name: "Yunara" },
-    { name: "Kinder" },
-  ]);
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filterTerm, setFilterTerm] = useState("");
 
+  useEffect(() => {
+    numbersService.getAll().then((response) => setPersons(response));
+  });
+
   const handleNewNameSubmit = (event) => {
     event.preventDefault();
-    if (persons.find((person) => person.name === newName)) {
-      alert(`${newName} is already added to the phonebook`);
+    const checkExistingPerson = persons.find(
+      (person) => person.name === newName
+    );
+    if (checkExistingPerson) {
+      if (checkExistingPerson.number === newNumber) {
+        alert(`${newName} is already added to the phonebook`);
+        return;
+      }
+      if (
+        confirm(
+          `${newName} is already added to the phonebook with the number ${checkExistingPerson.number}. Would you like to change it to ${newNumber}?`
+        )
+      ) {
+        numbersService.update(
+          { name: newName, number: newNumber },
+          checkExistingPerson.id
+        );
+      }
       return;
     }
     if (newName === "") {
       alert("Please input a name");
       return;
     }
-    setPersons([...persons, { name: newName, number: newNumber }]);
-    setNewName("");
-    setNewNumber("");
+    const newPerson = { name: newName, number: newNumber };
+    numbersService
+      .create(newPerson)
+      .then((r) => {
+        setPersons(persons.concat(r));
+        setNewName("");
+        setNewNumber("");
+      })
+      .catch(() => {
+        alert("could not load persons");
+      });
   };
 
   const handleNewNameInput = (event) => {
@@ -35,6 +60,10 @@ const App = () => {
 
   const handleNewNumberInput = (event) => {
     setNewNumber(event.target.value);
+  };
+
+  const handleDelete = (id) => {
+    numbersService.deletePerson(id);
   };
 
   return (
@@ -47,7 +76,11 @@ const App = () => {
         newNumber={newNumber}
         handleNewNameSubmit={handleNewNameSubmit}
       />
-      <Numbers filterTerm={filterTerm} persons={persons} />
+      <Numbers
+        filterTerm={filterTerm}
+        persons={persons}
+        handleDelete={handleDelete}
+      />
     </div>
   );
 };
