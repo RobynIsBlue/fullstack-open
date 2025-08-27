@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import SingleCountry from "./SingleCountry";
+import Country from "./Country";
 
 function CountryList({ filterTerm }) {
   const [countries, setCountries] = useState([]);
@@ -15,11 +16,15 @@ function CountryList({ filterTerm }) {
     promiseCountry();
   }, []);
 
+  const displayCountry = (country) => {
+    return <SingleCountry name={country} />;
+  };
+
   const countryFilteredList = () => {
     const filteredCountries = countries.filter((country) => {
       return country.toLowerCase().includes(filterTerm);
     });
-    if (filteredCountries.length > 10) {
+    if (filteredCountries.length > 10 || filteredCountries.length === 0) {
       return <p>Please expand search term</p>;
     }
     if (filteredCountries.length === 1) {
@@ -28,7 +33,11 @@ function CountryList({ filterTerm }) {
     return (
       <ul>
         {filteredCountries.map((country) => {
-          return <li key={country}>{country}</li>;
+          return (
+            <Country name={country} key={country}>
+              {country}
+            </Country>
+          );
         })}
       </ul>
     );
