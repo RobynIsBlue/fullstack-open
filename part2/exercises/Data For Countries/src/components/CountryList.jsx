@@ -16,10 +16,6 @@ function CountryList({ filterTerm }) {
     promiseCountry();
   }, []);
 
-  const displayCountry = (country) => {
-    return <SingleCountry name={country} />;
-  };
-
   const countryFilteredList = () => {
     const filteredCountries = countries.filter((country) => {
       return country.toLowerCase().includes(filterTerm);
@@ -42,10 +38,6 @@ function CountryList({ filterTerm }) {
       </ul>
     );
   };
-
-  if (countries.length !== 0) {
-    countryFilteredList();
-  }
 
   return <div>{countryFilteredList()}</div>;
 }

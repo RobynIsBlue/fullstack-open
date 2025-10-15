@@ -1,12 +1,12 @@
 import SearchBar from "./components/SearchBar";
 import CountryList from "./components/CountryList";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useState } from "react";
 
 function App() {
   const [filterTerm, setFilterTerm] = useState("");
 
   console.log(filterTerm);
+  console.log("Weather:", import.meta.env.VITE_WEATHER_KEY);
 
   return (
     <div>

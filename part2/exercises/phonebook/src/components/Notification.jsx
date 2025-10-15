@@ -8,6 +8,6 @@ const Notification = ({ noti }) => {
   } else {
     styleBinary = { ...styleBinary, color: "red", border: "2px red solid" };
   }
-  return <div style={styleBinary}>{noti.message}</div>;
+  return <span style={styleBinary}>{noti.message}</span>;
 };
 export default Notification;
