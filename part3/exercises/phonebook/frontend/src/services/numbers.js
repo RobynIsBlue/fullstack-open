@@ -1,8 +1,17 @@
 import axios from "axios";
-const baseURL = "http://localhost:3001/persons";
+const baseURL = "https://fullstack-open-yosb.onrender.com/api/persons";
 
 const getAll = () => {
-  return axios.get(baseURL).then((r) => r.data);
+  axios
+    .get(baseURL)
+    .then((r) => {
+      console.log(r.data);
+    })
+    .catch(console.log("oopsie"));
+  return axios.get(baseURL).then((r) => {
+    console.log("this");
+    r.data;
+  });
 };
 
 const create = (obj) => {
