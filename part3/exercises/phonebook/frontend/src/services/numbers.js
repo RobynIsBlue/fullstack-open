@@ -2,28 +2,31 @@ import axios from "axios";
 const baseURL = "https://fullstack-open-yosb.onrender.com/api/persons";
 
 const getAll = () => {
-  axios
+  return axios
     .get(baseURL)
     .then((r) => {
-      console.log(r.data);
+      console.log("this");
+      return r.data;
     })
-    .catch(console.log("oopsie"));
-  return axios.get(baseURL).then((r) => {
-    console.log("this");
-    r.data;
-  });
+    .catch("Couldn't getAll");
 };
 
 const create = (obj) => {
-  return axios.post(baseURL, obj).then((r) => r.data);
+  return axios
+    .post(baseURL, obj)
+    .then((r) => r.data)
+    .catch("Couldn't create");
 };
 
 const update = (obj, id) => {
-  return axios.put(`${baseURL}/${id}`, obj).then((r) => r.data);
+  return axios
+    .put(`${baseURL}/${id}`, obj)
+    .then((r) => r.data)
+    .catch("Couldn't update");
 };
 
 const deletePerson = (id) => {
-  return axios.delete(`${baseURL}/${id}`);
+  return axios.delete(`${baseURL}/${id}`).catch("Couldn't delete");
 };
 
 export default {
