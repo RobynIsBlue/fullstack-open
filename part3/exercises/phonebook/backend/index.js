@@ -2,7 +2,6 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const app = express();
-// const { createProxyMiddleware } = require("http-proxy-middleware");
 
 app.use(express.json());
 app.use(cors());
@@ -13,13 +12,6 @@ app.use(
   morgan(":method :url :status :res[content-length] - :response-time ms :borb")
 );
 app.use(express.static("dist"));
-// app.use(
-//   "/api/persons",
-//   createProxyMiddleware({
-//     target: "http://localhost:3001",
-//     changeOrigin: true,
-//   })
-// );
 
 let persons = [
   {
