@@ -1,4 +1,8 @@
 function Numbers({ persons, filterTerm, handleDelete }) {
+  if (persons == null) {
+    return;
+  }
+  console.log(persons);
   return (
     <div>
       <h2>Numbers</h2>

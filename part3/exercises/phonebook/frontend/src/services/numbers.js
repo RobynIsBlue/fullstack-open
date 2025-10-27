@@ -1,5 +1,5 @@
 import axios from "axios";
-const baseURL = "https://fullstack-open-yosb.onrender.com/api/persons";
+const baseURL = "/api/persons";
 
 const getAll = () => {
   return axios
