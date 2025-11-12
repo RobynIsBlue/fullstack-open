@@ -42,9 +42,19 @@ const App = () => {
       ) {
         const newPerson = { name: newName, number: newNumber };
         numbersService
-          .update(newPerson, checkExistingPerson.id)
+          .update(newPerson, checkExistingPerson._id)
+          .then(
+            setPersons(
+              //PROBLEM HERE
+              persons.reduce((person, current) => {
+                if (checkExistingPerson._id == person._id) {
+                  return current + newPerson;
+                }
+                return current + person;
+              }, [])
+            )
+          )
           .then(() => {
-            setPersons(persons.concat(newPerson));
             setNotiMessage({
               message: `The number for ${newName} has been changed to ${newNumber}`,
               success: true,

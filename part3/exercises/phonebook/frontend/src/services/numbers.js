@@ -5,7 +5,6 @@ const getAll = () => {
   return axios
     .get(baseURL)
     .then((r) => {
-      console.log("this");
       return r.data;
     })
     .catch("Couldn't getAll");
@@ -19,6 +18,7 @@ const create = (obj) => {
 };
 
 const update = (obj, id) => {
+  console.log(`${baseURL}/${id}`);
   return axios
     .put(`${baseURL}/${id}`, obj)
     .then((r) => r.data)

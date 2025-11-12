@@ -14,57 +14,67 @@ app.use(
 );
 app.use(express.static("dist"));
 
-app.get("/api/persons", (request, response) => {
-  Note.find({}).then((entries) => {
-    response.json(entries);
-  });
+app.get("/api/persons", (request, response, next) => {
+  Note.find({})
+    .then((entries) => {
+      response.json(entries);
+    })
+    .catch((error) => next(error));
 });
 
-app.get("/info", (request, response) => {
+app.get("/info", (request, response, next) => {
   const date = Date().toLocaleString();
   const noteFindLength = Note.find({})
     .then((res) => res.length)
     .then((res) =>
-      response.send(
-        `<div>
+      response
+        .send(
+          `<div>
         <p>Phonebook has info for ${res} people</p>
         <p>${date}</p>
     </div>`
-      )
+        )
+        .catch((error) => next(error))
     );
 });
 
-app.get("/api/persons/:id", (request, response) => {
-  Note.findById(request.params.id).then((entries) => {
-    if (entries.length == 0) {
-      console.log("no entries");
-      return response.send(`<div> This info does not exist! </div>`);
-    }
-    response.json(entries);
-  });
+app.get("/api/persons/:id", (request, response, next) => {
+  Note.findById(request.params.id)
+    .then((note) => {
+      if (note) {
+        response.json(note);
+      } else {
+        response.status(404).end();
+      }
+    })
+    .catch((error) => next(error));
 });
 
-app.delete("/api/persons/:id", (request, response) => {
+app.delete("/api/persons/:id", (request, response, next) => {
   Note.findByIdAndDelete(request.params.id)
     .then((entries) => {
       console.log("deleted!");
       response.status(201).end();
     })
-    .catch("was not deleted");
+    .catch((error) => next(error));
+});
+
+app.put("/api/persons/:id", (request, response, next) => {
+  console.log("WEEEEEEEEEEEEEEEEEEEEe");
+  console.log(request.params.id);
+  Note.findByIdAndUpdate(request.params.id, request.body).then((res) => {
+    console.log(res);
+  });
 });
 
 app.post("/api/persons", (request, response) => {
   const body = request.body;
 
   if (!body.name || !body.number) {
+    next();
+
     return response.status(400).json({
       error: "Missing name and/or number",
-    });
-  }
-
-  if (persons.find((person) => person.name === body.name)) {
-    return response.status(400).json({
-      erorr: "Name already exists",
     });
   }
 
@@ -73,12 +83,25 @@ app.post("/api/persons", (request, response) => {
     number: body.number,
   });
 
+  console.log(body.name);
+  Note.find({ name: body.name }).then((res) => {
+    if (res.length > 0) {
+      return;
+    }
+  });
+
   person.save().then((result) => {
     console.log(`saved ${result}!`);
   });
 
   response.json(person);
 });
+
+const errorHandler = (error, request, response, next) => {
+  console.log(error);
+
+  next(error);
+};
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
