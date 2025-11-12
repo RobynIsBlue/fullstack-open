@@ -15,8 +15,8 @@ function Numbers({ persons, filterTerm, handleDelete }) {
         })
         .map((person) => (
           <p key={person.name}>
-            {person.name} {person.number}
-            <button onClick={() => handleDelete(person.id)}>Delete</button>
+            {person.name} {person.number} {console.log(person._id)}
+            <button onClick={() => handleDelete(person._id)}>Delete</button>
           </p>
         ))}
     </div>
