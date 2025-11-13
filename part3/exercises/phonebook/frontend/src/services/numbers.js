@@ -19,10 +19,7 @@ const create = (obj) => {
 
 const update = (obj, id) => {
   console.log(`${baseURL}/${id}`);
-  return axios
-    .put(`${baseURL}/${id}`, obj)
-    .then((r) => r.data)
-    .catch("Couldn't update");
+  return axios.put(`${baseURL}/${id}`, obj).catch("Couldn't update");
 };
 
 const deletePerson = (id) => {

@@ -52,7 +52,7 @@ app.get("/api/persons/:id", (request, response, next) => {
 
 app.delete("/api/persons/:id", (request, response, next) => {
   Note.findByIdAndDelete(request.params.id)
-    .then((entries) => {
+    .then(() => {
       console.log("deleted!");
       response.status(201).end();
     })
@@ -62,9 +62,14 @@ app.delete("/api/persons/:id", (request, response, next) => {
 app.put("/api/persons/:id", (request, response, next) => {
   console.log("WEEEEEEEEEEEEEEEEEEEEe");
   console.log(request.params.id);
-  Note.findByIdAndUpdate(request.params.id, request.body).then((res) => {
-    console.log(res);
-  });
+  Note.findByIdAndUpdate(request.params.id, request.body)
+    .then(() => {
+      response.status(200).end();
+      console.log("hello");
+    })
+    .catch((error) => {
+      next(error);
+    });
 });
 
 app.post("/api/persons", (request, response) => {
@@ -72,7 +77,6 @@ app.post("/api/persons", (request, response) => {
 
   if (!body.name || !body.number) {
     next();
-
     return response.status(400).json({
       error: "Missing name and/or number",
     });

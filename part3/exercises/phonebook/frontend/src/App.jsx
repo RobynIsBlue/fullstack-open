@@ -40,21 +40,23 @@ const App = () => {
           `${newName} is already added to the phonebook with the number ${checkExistingPerson.number}. Would you like to change it to ${newNumber}?`
         )
       ) {
+        console.log("new person");
         const newPerson = { name: newName, number: newNumber };
         numbersService
           .update(newPerson, checkExistingPerson._id)
-          .then(
-            setPersons(
-              //PROBLEM HERE
-              persons.reduce((person, current) => {
-                if (checkExistingPerson._id == person._id) {
-                  return current + newPerson;
-                }
-                return current + person;
-              }, [])
-            )
-          )
           .then(() => {
+            persons.map((person) => console.log("person 1,", person));
+            setPersons(
+              persons.reduce((total, person) => {
+                if (person.name == newName) {
+                  return total.concat(newPerson);
+                }
+                return total.concat(person);
+              }, [])
+            );
+          })
+          .then(() => {
+            console.log("final then");
             setNotiMessage({
               message: `The number for ${newName} has been changed to ${newNumber}`,
               success: true,
@@ -63,7 +65,8 @@ const App = () => {
             setNewNumber("");
             timeOut(setNotiMessage);
           })
-          .catch(() => {
+          .catch((error) => {
+            console.log(error);
             setNotiMessage({
               message: `${newName} does not exist in the database`,
               success: false,
